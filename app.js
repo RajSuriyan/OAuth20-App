@@ -1,12 +1,11 @@
 //jshint esversion:6
 require("dotenv").config();
-const bcrypt=require("bcrypt");
+
 const express=require('express');
 const bodyParser=require('body-parser');
 const ejs=require("ejs");
 const mongoose=require("mongoose");
-const encrypt=require("mongoose-encryption");
-const saltrounds=10;
+
 const app=express();
 
 app.use(express.static(__dirname+"/public"));
@@ -40,21 +39,7 @@ app.get("/register",function(req,res){
 
 
 app.post("/register",function(req,res){
-    bcrypt.hash(req.body.password,saltrounds,function(err,hash){
-    const newUser=new User({
-        email:req.body.username,
-        password:hash
-    });
-    
-    
-    newUser.save(function(err){
-        if(err){
-            console.log(err);
-        }else{
-            res.render("secrets");
-        }
-    });
-});
+  
 
 });
 
@@ -62,26 +47,7 @@ app.post("/login",function(req,res){
     
   
         
-        const userName=req.body.username;
-        const password = req.body.password;
-        User.findOne({email:userName},function(err,foundUser){
-            if(err){
-                console.log(err);
-            }else{
-                if(foundUser){
-                    
-                    bcrypt.compare(password, foundUser.password,function(err,result){
-                        if(result===true){
-                            res.render("secrets");
-                        }else{
-                            res.send("Incorrect Password!");
-                        }
-                    });
-                }else{
-                    res.send("Invalid User Name");
-                }
-            }
-        });
+        
     
     
 });
